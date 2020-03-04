@@ -4,7 +4,6 @@ project(sonar_mapping_c)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-   darknet_ros_msgs
    eigen_conversions
    nav_msgs
    roscpp
@@ -32,7 +31,6 @@ catkin_package(
    INCLUDE_DIRS
       include
    CATKIN_DEPENDS
-      darknet_ros_msgs
       eigen_conversions
       nav_msgs
       roscpp
@@ -60,7 +58,6 @@ add_library(math_functions src/math_functions.cpp)
 
 
 add_executable(${PROJECT_NAME}_node src/sonar_mapping_node.cpp)
-#add_executable(object_placement_node src/object_placement.cpp)
+
 
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${EIGEN3_LIBRARIES} math_functions)
-#target_link_libraries(object_placement_node ${catkin_LIBRARIES} ${EIGEN3_LIBRARIES} math_functions)
