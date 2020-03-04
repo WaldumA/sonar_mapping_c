@@ -38,26 +38,32 @@ private:
     MatrixXi global_map;  
 
     // ROSparams
+    float rate;
     int scale, size;
+    string laser_topic, odometry_topic, map_topic;
 
 public:
     // Constructor
     sonarMapping(int argc, char** argv) {
         // Get ROSparams
+        nh.getParam("PUBLISHING_RATE",rate);
         nh.getParam("MAP_SIZE",size);
         nh.getParam("SCALE",scale);
+        nh.getParam("LASER_SCAN_TOPIC", laser_topic);
+        nh.getParam("ODOMETRY_TOPIC", odometry_topic);
+        nh.getParam("MAP_PUBLISHING_TOPIC", map_topic);
         // Initiates map
         global_map = MatrixXi(size,size);
         global_map.setConstant(-1);
         // Initate msg
         initiateMapMsg();
         //Initiate publsiher
-        map_pub = nh.advertise<nav_msgs::OccupancyGrid>("/map",100);
+        map_pub = nh.advertise<nav_msgs::OccupancyGrid>(map_topic,100);
     
         // Callback functions
-        ekf_sub = nh.subscribe("/odometry/filtered",100,&sonarMapping::ekfCallback, this);
-        sonar_sub = nh.subscribe("/manta/sonar",100,&sonarMapping::sonarCallback, this);
-        timer = nh.createTimer(ros::Duration(0.5),&sonarMapping::mappingCallback, this);
+        ekf_sub = nh.subscribe(odometry_topic,100,&sonarMapping::ekfCallback, this);
+        sonar_sub = nh.subscribe(laser_topic,100,&sonarMapping::sonarCallback, this);
+        timer = nh.createTimer(ros::Duration(rate),&sonarMapping::mappingCallback, this);
     }
     // Destructor
     ~sonarMapping(){
