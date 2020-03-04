@@ -1,4 +1,4 @@
-# Sonar_mapping
+# Sonar mapping
 
 ### Dependencies
 - ROS-kinetic
