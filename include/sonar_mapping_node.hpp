@@ -4,7 +4,7 @@
 
 // Dependencies
 #include <ros/ros.h>
-#include "mapping_functions.hpp"
+#include "math_functions.hpp"
 #include <nav_msgs/OccupancyGrid.h>
 #include <sensor_msgs/LaserScan.h>
 #include <nav_msgs/Odometry.h>
@@ -37,11 +37,17 @@ private:
     // Map
     MatrixXi global_map;  
 
+    // ROSparams
+    int scale, size;
+
 public:
     // Constructor
     sonarMapping(int argc, char** argv) {
+        // Get ROSparams
+        nh.getParam("MAP_SIZE",size);
+        nh.getParam("SCALE",scale);
         // Initiates map
-        global_map = MatrixXi(500,500);
+        global_map = MatrixXi(size,size);
         global_map.setConstant(-1);
         // Initate msg
         initiateMapMsg();

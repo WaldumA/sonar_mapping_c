@@ -4,6 +4,7 @@ project(sonar_mapping_c)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
+   darknet_ros_msgs
    eigen_conversions
    nav_msgs
    roscpp
@@ -12,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
    tf2
    tf2_geometry_msgs
    tf2_ros
+   vortex_msgs
   
 )
 
@@ -26,19 +28,11 @@ if(NOT EIGEN3_FOUND)
   set(EIGEN_PACKAGE Eigen)
 endif()
 
-
-
-generate_messages(
-   DEPENDENCIES
-   std_msgs
-   sensor_msgs
-   nav_msgs
-)
-
 catkin_package(
    INCLUDE_DIRS
       include
    CATKIN_DEPENDS
+      darknet_ros_msgs
       eigen_conversions
       nav_msgs
       roscpp
@@ -47,6 +41,8 @@ catkin_package(
       tf2
       tf2_geometry_msgs
       tf2_ros
+      vortex_msgs
+      
    DEPENDS
       ${EIGEN_PACKAGE}
 )
@@ -59,10 +55,12 @@ include_directories(
 )
 include_directories(SYSTEM ${Boost_INCLUDE_DIR} ${EIGEN_INCLUDE_DIRS})
 
-add_library(mapping_functions src/mapping_functions.cpp)
+
 add_library(math_functions src/math_functions.cpp)
 
 
 add_executable(${PROJECT_NAME}_node src/sonar_mapping_node.cpp)
+#add_executable(object_placement_node src/object_placement.cpp)
 
-target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${EIGEN3_LIBRARIES} mapping_functions math_functions)
+target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${EIGEN3_LIBRARIES} math_functions)
+#target_link_libraries(object_placement_node ${catkin_LIBRARIES} ${EIGEN3_LIBRARIES} math_functions)

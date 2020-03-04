@@ -1,0 +1,7 @@
+# This file is the only file that should be changed when using this pacakage. 
+# Change parameters to your prefrence
+
+# MAP PARAMETERS -----------------------------------------------------------------------------------------------------------------------------------
+MAP_SIZE: 500 # The map will be of size (MAP_SIZE,MAP_SIZE)
+SCALE : 5 # SCALE OF MAP -- Resolution of map will be 1/SCALE
+#---------------------------------------------------------------------------------------------------------------------------------------------------

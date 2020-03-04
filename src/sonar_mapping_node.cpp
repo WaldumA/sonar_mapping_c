@@ -22,7 +22,7 @@ void sonarMapping::sonarCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
 
 // Timer callback publishing a map at a set intervall 
 void sonarMapping::mappingCallback(const ros::TimerEvent& event) {
-    updateGlobalMap(5);
+    updateGlobalMap(scale);
     updateMapMsg();
     map_pub.publish(map_data);
     
@@ -96,14 +96,14 @@ void sonarMapping::updateGlobalMap(float scale) {
 
 void sonarMapping::initiateMapMsg() {
     map_data.header.frame_id = "map";
-    map_data.info.resolution = 0.2;
-    map_data.info.width = 500;
-    map_data.info.height = 500;
-    map_data.info.origin.position.x = - 250 * 0.2;
-    map_data.info.origin.position.y = - 250 * 0.2;
+    map_data.info.resolution = (1.0/(float)scale);
+    map_data.info.width = size;
+    map_data.info.height = size;
+    map_data.info.origin.position.x = - ((float)size/2.0) * (1.0/(float)scale);
+    map_data.info.origin.position.y = - ((float)size/2.0) * (1.0/(float)scale);
     map_data.header.stamp = ros::Time::now();
     map_data.header.frame_id = "manta/odom";  
-    map_data.data.resize(500*500);
+    map_data.data.resize(size*size);
 }
 
 
@@ -112,7 +112,7 @@ void sonarMapping::updateMapMsg() {
     MatrixXi tmp_v;
     //tmp_v = global_map.transpose();
     tmp_v = global_map.reverse();
-    tmp_v.resize(1,500*500);
+    tmp_v.resize(1,size*size);
     for (int i = 0; i < tmp_v.size();i++) {
         map_data.data[i] = tmp_v(i);
     }
